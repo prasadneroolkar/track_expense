@@ -1,4 +1,4 @@
-const Table = () => {
+const Table = ({ itemsAdded }) => {
   return (
     <>
       <table className="expense-table">
