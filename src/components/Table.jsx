@@ -1,7 +1,6 @@
 const Table = ({ itemsAdded, onHandleDel }) => {
   const onDelete = (index) => {
     onHandleDel(index);
-    console.log(index);
   };
   return (
     <>
@@ -51,7 +50,7 @@ const Table = ({ itemsAdded, onHandleDel }) => {
               <td>{elem.cat}</td>
               <td>{`₹ ${elem.amt}`}</td>
               <td>
-                <button onClick={() => onDelete(elem.index)}>delete</button>
+                <button onClick={() => onDelete(elem.id)}>delete</button>
               </td>
             </tr>
           ))}

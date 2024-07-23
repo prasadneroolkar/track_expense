@@ -2,6 +2,7 @@ import Form from "./components/Form";
 import Table from "./components/Table";
 import "./App.css";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const getLocalItem = () => {
@@ -20,13 +21,15 @@ function App() {
 
   const addValue = (title, cat, amt) => {
     console.log(`added : ${title}, ${cat}, ${amt}`);
-    const newArray = [...items, { title, cat, amt }];
+    const newArray = [...items, { id: uuidv4(), title, cat, amt }];
     SetItems(newArray);
     console.log(newArray);
   };
 
-  const delValue = (id) => {
-    console.log(`deleted: ${id}`);
+  const delValue = (ide) => {
+    console.log(`deleted: ${ide}`);
+    const deletedItems = items.filter((val) => val.id !== ide);
+    SetItems(deletedItems);
   };
 
   return (
