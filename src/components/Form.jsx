@@ -36,7 +36,7 @@ const Form = ({ onHandleAdd, editItem }) => {
   const handleAdd = (event) => {
     event.preventDefault();
     onHandleAdd(title, category, amount);
-    alert("added succefully");
+
     setTitle("");
     setCategory("Select");
     setAmount("");
@@ -65,7 +65,7 @@ const Form = ({ onHandleAdd, editItem }) => {
           />
         </div>
 
-        <button className="add-btn">Add</button>
+        <button className="add-btn">{editItem ? "Update" : "Add"}</button>
       </form>
     </>
   );

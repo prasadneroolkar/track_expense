@@ -64,7 +64,7 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
                   edit
                 </button>
               </td>
-              <td></td>
+              <td>{elem.message}</td>
             </tr>
           ))}
 

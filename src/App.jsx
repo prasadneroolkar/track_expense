@@ -14,7 +14,6 @@ function App() {
     }
   };
   const [items, SetItems] = useState(getLocalItem());
-
   const [editItems, setEdititems] = useState(null);
 
   useEffect(() => {
@@ -22,23 +21,57 @@ function App() {
   }, [items]);
 
   const addValue = (title, cat, amt) => {
-    console.log(`added : ${title}, ${cat}, ${amt}`);
-    const newArray = [...items, { id: uuidv4(), title, cat, amt }];
-    SetItems(newArray);
-    console.log(newArray);
+    if (editItems) {
+      const updated = items.map((item) =>
+        item.id === editItems.id
+          ? {
+              ...item,
+              title,
+              cat,
+              amt,
+              message: "Record updated successfully",
+              timestamp: Date.now(),
+            }
+          : item
+      );
+      SetItems(updated);
+
+      setEdititems(null);
+    } else {
+      // console.log(`added : ${title}, ${cat}, ${amt}`);
+      const newArray = [...items, { id: uuidv4(), title, cat, amt }];
+      SetItems(newArray);
+      console.log(newArray);
+    }
   };
 
   const delValue = (ide) => {
-    console.log(`deleted: ${ide}`);
+    // console.log(`deleted: ${ide}`);
     const deletedItems = items.filter((val) => val.id !== ide);
     SetItems(deletedItems);
+    console.log(deletedItems);
   };
 
-  const editValue = (id, title, cat, amt) => {
-    console.log(`edit value: ${id}, ${title}, ${cat}, ${amt}`);
-    const editArray = { id: uuidv4(), title, cat, amt };
+  const editValue = (ide) => {
+    const editArray = items.find((ele) => {
+      return ele.id === ide;
+    });
     setEdititems(editArray);
+    console.log(editArray);
   };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const updatedItems = items.map((item) => {
+        if (item.message && Date.now() - item.timestamp > 5000) {
+          return { ...item, message: "" };
+        }
+        return item;
+      });
+      SetItems(updatedItems);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [items]);
 
   return (
     <>
