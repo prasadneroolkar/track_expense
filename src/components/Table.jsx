@@ -1,6 +1,9 @@
-const Table = ({ itemsAdded, onHandleDel }) => {
+const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
   const onDelete = (index) => {
     onHandleDel(index);
+  };
+  const onEdit = (id, title, cat, amt) => {
+    onHandleEdit(id, title, cat, amt);
   };
   return (
     <>
@@ -52,6 +55,16 @@ const Table = ({ itemsAdded, onHandleDel }) => {
               <td>
                 <button onClick={() => onDelete(elem.id)}>delete</button>
               </td>
+              <td>
+                <button
+                  onClick={() =>
+                    onEdit(elem.id, elem.title, elem.cat, elem.amt)
+                  }
+                >
+                  edit
+                </button>
+              </td>
+              <td></td>
             </tr>
           ))}
 

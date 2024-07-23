@@ -15,6 +15,8 @@ function App() {
   };
   const [items, SetItems] = useState(getLocalItem());
 
+  const [editItems, setEdititems] = useState(null);
+
   useEffect(() => {
     localStorage.setItem("storeItems", JSON.stringify(items));
   }, [items]);
@@ -32,13 +34,23 @@ function App() {
     SetItems(deletedItems);
   };
 
+  const editValue = (id, title, cat, amt) => {
+    console.log(`edit value: ${id}, ${title}, ${cat}, ${amt}`);
+    const editArray = { id: uuidv4(), title, cat, amt };
+    setEdititems(editArray);
+  };
+
   return (
     <>
       <main>
         <h1>Track Your Expense</h1>
         <div className="expense-tracker">
-          <Form onHandleAdd={addValue} />
-          <Table itemsAdded={items} onHandleDel={delValue} />
+          <Form onHandleAdd={addValue} editItem={editItems} />
+          <Table
+            itemsAdded={items}
+            onHandleDel={delValue}
+            onHandleEdit={editValue}
+          />
           <div className="context-menu">
             <div>Edit</div>
             <div>Delete</div>
