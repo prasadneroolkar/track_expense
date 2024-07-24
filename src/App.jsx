@@ -29,7 +29,7 @@ function App() {
               title,
               cat,
               amt,
-              message: "Record updated successfully",
+              message: "Record updated successfully!",
               timestamp: Date.now(),
             }
           : item
