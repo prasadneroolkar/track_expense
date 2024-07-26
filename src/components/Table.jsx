@@ -6,6 +6,7 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   const [showMenu, setShowMenu] = useState(false);
+  // console.log(showMenu);
 
   const onDelete = (index) => {
     onHandleDel(index);
@@ -17,14 +18,18 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
   const handleContextMenu = (e) => {
     e.preventDefault();
     setMenuPosition({ x: e.clientX, y: e.clientY });
+    setShowMenu(true);
+    // console.log(`onhandle:${showMenu}`);
   };
 
   const handleClick = () => {
     setShowMenu(false);
+    // console.log(`onclick:${showMenu}`);
   };
 
   return (
-    <>
+    <div onClick={handleClick}>
+      {showMenu && <ContextMenu menuPosition={menuPosition} />}
       <table className="expense-table">
         <thead>
           <tr>
@@ -66,29 +71,26 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
         </thead>
         <tbody>
           {itemsAdded.map((elem, index) => (
-            <tr
-              key={index}
-              onContextMenu={handleContextMenu}
-              onClick={handleClick}
-            >
-              {showMenu && <ContextMenu menuPosition={menuPosition} />}
-              <td>{elem.title}</td>
-              <td>{elem.cat}</td>
-              <td>{`₹ ${elem.amt}`}</td>
-              <td>
-                <button onClick={() => onDelete(elem.id)}>delete</button>
-              </td>
-              <td>
-                <button
-                  onClick={() =>
-                    onEdit(elem.id, elem.title, elem.cat, elem.amt)
-                  }
-                >
-                  edit
-                </button>
-              </td>
-              <td>{elem.message}</td>
-            </tr>
+            <>
+              <tr key={index} onContextMenu={handleContextMenu}>
+                <td>{elem.title}</td>
+                <td>{elem.cat}</td>
+                <td>{`₹ ${elem.amt}`}</td>
+                <td>
+                  <button onClick={() => onDelete(elem.id)}>delete</button>
+                </td>
+                <td>
+                  <button
+                    onClick={() =>
+                      onEdit(elem.id, elem.title, elem.cat, elem.amt)
+                    }
+                  >
+                    edit
+                  </button>
+                </td>
+                <td>{elem.message}</td>
+              </tr>
+            </>
           ))}
 
           <tr>
@@ -101,7 +103,7 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
           </tr>
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 

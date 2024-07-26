@@ -84,10 +84,6 @@ function App() {
             onHandleDel={delValue}
             onHandleEdit={editValue}
           />
-          <div className="context-menu">
-            <div>Edit</div>
-            <div>Delete</div>
-          </div>
         </div>
       </main>
     </>
