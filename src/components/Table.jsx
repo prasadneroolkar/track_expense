@@ -1,10 +1,28 @@
+import React, { useState } from "react";
+
+import ContextMenu from "./ContextMenu";
+
 const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+
+  const [showMenu, setShowMenu] = useState(false);
+
   const onDelete = (index) => {
     onHandleDel(index);
   };
   const onEdit = (id, title, cat, amt) => {
     onHandleEdit(id, title, cat, amt);
   };
+
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    setMenuPosition({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleClick = () => {
+    setShowMenu(false);
+  };
+
   return (
     <>
       <table className="expense-table">
@@ -48,7 +66,12 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
         </thead>
         <tbody>
           {itemsAdded.map((elem, index) => (
-            <tr key={index}>
+            <tr
+              key={index}
+              onContextMenu={handleContextMenu}
+              onClick={handleClick}
+            >
+              {showMenu && <ContextMenu menuPosition={menuPosition} />}
               <td>{elem.title}</td>
               <td>{elem.cat}</td>
               <td>{`₹ ${elem.amt}`}</td>
