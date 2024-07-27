@@ -4,7 +4,7 @@ import ContextMenu from "./ContextMenu";
 
 const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-
+  const [selectedItem, setSelectedItem] = useState(null); // State to store the currently selected item
   const [showMenu, setShowMenu] = useState(false);
   // console.log(showMenu);
 
@@ -15,9 +15,30 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
     onHandleEdit(id, title, cat, amt);
   };
 
-  const handleContextMenu = (e) => {
+  const handleEdit = () => {
+    if (selectedItem) {
+      onEdit(
+        selectedItem.id,
+        selectedItem.title,
+        selectedItem.cat,
+        selectedItem.amt
+      ); // Call the edit function with the selected item's details
+      setShowMenu(false); // Hide the context menu
+    }
+  };
+
+  const handleDelete = () => {
+    if (selectedItem) {
+      onDelete(selectedItem.id); // Call the delete function with the selected item's ID
+      setShowMenu(false); // Hide the context menu
+    }
+  };
+
+  const handleContextMenu = (e, item) => {
     e.preventDefault();
     setMenuPosition({ x: e.clientX, y: e.clientY });
+    setSelectedItem(item);
+
     setShowMenu(true);
     // console.log(`onhandle:${showMenu}`);
   };
@@ -29,7 +50,13 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
 
   return (
     <div onClick={handleClick}>
-      {showMenu && <ContextMenu menuPosition={menuPosition} />}
+      {showMenu && (
+        <ContextMenu
+          menuPosition={menuPosition}
+          contextEdit={handleEdit}
+          contextDel={handleDelete}
+        />
+      )}
       <table className="expense-table">
         <thead>
           <tr>
@@ -72,22 +99,11 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
         <tbody>
           {itemsAdded.map((elem, index) => (
             <>
-              <tr key={index} onContextMenu={handleContextMenu}>
+              <tr key={index} onContextMenu={(e) => handleContextMenu(e, elem)}>
                 <td>{elem.title}</td>
                 <td>{elem.cat}</td>
                 <td>{`₹ ${elem.amt}`}</td>
-                <td>
-                  <button onClick={() => onDelete(elem.id)}>delete</button>
-                </td>
-                <td>
-                  <button
-                    onClick={() =>
-                      onEdit(elem.id, elem.title, elem.cat, elem.amt)
-                    }
-                  >
-                    edit
-                  </button>
-                </td>
+
                 <td>{elem.message}</td>
               </tr>
             </>

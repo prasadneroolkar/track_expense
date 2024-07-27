@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-const ContextMenu = ({ menuPosition }) => {
+const ContextMenu = ({ menuPosition, contextEdit, contextDel }) => {
   return (
     <div
       className="context-menu"
       style={{ top: menuPosition.y, left: menuPosition.x }}
     >
-      <div>Edit</div>
-      <div>Delete</div>
+      <div onClick={contextEdit}>Edit</div>
+      <div onClick={contextDel}>Delete</div>
     </div>
   );
 };
