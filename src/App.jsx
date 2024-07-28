@@ -16,6 +16,11 @@ function App() {
   const [items, SetItems] = useState(getLocalItem());
   const [editItems, setEdititems] = useState(null);
 
+  let catArry = ["Grocery", "Clothes", "Bills", "Education", "Medicine"];
+
+  const [category, setCategory] = useState("Select");
+  const [tableCategory, setTableCategory] = useState("All");
+
   useEffect(() => {
     localStorage.setItem("storeItems", JSON.stringify(items));
   }, [items]);
@@ -73,16 +78,36 @@ function App() {
     return () => clearInterval(timer);
   }, [items]);
 
+  const onSelectChange = (e) => {
+    setCategory(e.target.value);
+    // console.log(e.target.value);
+  };
+
+  const onTableSelectChange = (e) => {
+    setTableCategory(e.target.value);
+    // console.log(e.target.value);
+  };
+
   return (
     <>
       <main>
         <h1>Track Your Expense</h1>
         <div className="expense-tracker">
-          <Form onHandleAdd={addValue} editItem={editItems} />
+          <Form
+            onHandleAdd={addValue}
+            parentArray={["Select", ...catArry]}
+            editItem={editItems}
+            iniCat={category}
+            setCat={setCategory}
+            onChangeSel={onSelectChange}
+          />
           <Table
             itemsAdded={items}
             onHandleDel={delValue}
             onHandleEdit={editValue}
+            parentArray={["All", ...catArry]}
+            onChangeSel={onTableSelectChange}
+            iniCat={tableCategory}
           />
         </div>
       </main>

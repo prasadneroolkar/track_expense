@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-
+import Select from "./Select";
 import ContextMenu from "./ContextMenu";
 
-const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
+const Table = ({
+  itemsAdded,
+  onHandleDel,
+  onHandleEdit,
+  iniCat,
+  onChangeSel,
+  parentArray,
+}) => {
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [selectedItem, setSelectedItem] = useState(null); // State to store the currently selected item
   const [showMenu, setShowMenu] = useState(false);
-  // console.log(showMenu);
+  // const [selcategory, setSelCat] = useState("All");
 
   const onDelete = (index) => {
     onHandleDel(index);
@@ -16,7 +23,10 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
   };
 
   const handleEdit = () => {
+    // console.log("handle edit", selectedItem);
+
     if (selectedItem) {
+      // console.log("handle edit", selectedItem);
       onEdit(
         selectedItem.id,
         selectedItem.title,
@@ -62,14 +72,19 @@ const Table = ({ itemsAdded, onHandleDel, onHandleEdit }) => {
           <tr>
             <th>Title</th>
             <th>
-              <select>
+              <Select
+                value={iniCat}
+                onChange={onChangeSel}
+                arryCat={parentArray}
+              />
+              {/* <select>
                 <option value="">All</option>
                 <option value="grocery">Grocery</option>
                 <option value="clothes">Clothes</option>
                 <option value="bills">Bills</option>
                 <option value="education">Education</option>
                 <option value="medicine">Medicine</option>
-              </select>
+              </select> */}
             </th>
             <th className="amount-column">
               <div>
