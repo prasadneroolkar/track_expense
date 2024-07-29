@@ -86,6 +86,9 @@ function App() {
   const onTableSelectChange = (e) => {
     setTableCategory(e.target.value);
     // console.log(e.target.value);
+    const copyFilter = [...catArry];
+
+    console.log(copyFilter);
   };
 
   return (

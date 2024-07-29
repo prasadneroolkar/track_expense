@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "./Select";
 import ContextMenu from "./ContextMenu";
 
@@ -11,9 +11,17 @@ const Table = ({
   parentArray,
 }) => {
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-  const [selectedItem, setSelectedItem] = useState(null); // State to store the currently selected item
+  const [selectedItem, setSelectedItem] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
-  // const [selcategory, setSelCat] = useState("All");
+  const [filteredItems, setFilteredItems] = useState(itemsAdded);
+
+  useEffect(() => {
+    setFilteredItems(
+      iniCat === "All"
+        ? itemsAdded
+        : itemsAdded.filter((item) => item.cat === iniCat)
+    );
+  }, [iniCat, itemsAdded]);
 
   const onDelete = (index) => {
     onHandleDel(index);
@@ -77,14 +85,6 @@ const Table = ({
                 onChange={onChangeSel}
                 arryCat={parentArray}
               />
-              {/* <select>
-                <option value="">All</option>
-                <option value="grocery">Grocery</option>
-                <option value="clothes">Clothes</option>
-                <option value="bills">Bills</option>
-                <option value="education">Education</option>
-                <option value="medicine">Medicine</option>
-              </select> */}
             </th>
             <th className="amount-column">
               <div>
@@ -112,24 +112,34 @@ const Table = ({
           </tr>
         </thead>
         <tbody>
-          {itemsAdded.map((elem, index) => (
-            <>
-              <tr key={index} onContextMenu={(e) => handleContextMenu(e, elem)}>
-                <td>{elem.title}</td>
-                <td>{elem.cat}</td>
-                <td>{`₹ ${elem.amt}`}</td>
+          {filteredItems.map((elem) => {
+            // console.log(itemsAdded);
+            return (
+              <>
+                <tr
+                  key={elem.id}
+                  onContextMenu={(e) => handleContextMenu(e, elem)}
+                >
+                  <td>{elem.title}</td>
+                  <td>{elem.cat}</td>
+                  <td>{`₹ ${elem.amt}`}</td>
 
-                <td>{elem.message}</td>
-              </tr>
-            </>
-          ))}
+                  <td>{elem.message}</td>
+                </tr>
+              </>
+            );
+          })}
 
           <tr>
             <th>Total</th>
             <th></th>
 
             <th>
-              ₹{itemsAdded.reduce((total, elem) => total + Number(elem.amt), 0)}
+              ₹
+              {filteredItems.reduce(
+                (total, elem) => total + Number(elem.amt),
+                0
+              )}
             </th>
           </tr>
         </tbody>
