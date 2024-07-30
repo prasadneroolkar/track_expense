@@ -1,43 +1,41 @@
 import Input from "./Input";
 import Select from "./Select";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import contextCreate from "../components/Context";
 
-const Form = ({
-  onHandleAdd,
-  editItem,
-  parentArray,
-  iniCat,
-  setCat,
-  onChangeSel,
-}) => {
+const Form = () => {
+  const {
+    addValue,
+    catArry,
+    editItems,
+    category,
+    setCategory,
+    onSelectChange,
+  } = useContext(contextCreate);
+
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
 
   // console.log(category);
 
   useEffect(() => {
-    if (editItem) {
-      setTitle(editItem.title || "");
-      setAmount(editItem.amt || "Select");
-      setCat(editItem.cat || "");
+    if (editItems) {
+      setTitle(editItems.title || "");
+      setAmount(editItems.amt || "Select");
+      setCategory(editItems.cat || "");
     } else {
       setTitle("");
-      setCat("Select");
+      setCategory("Select");
       setAmount("");
     }
-  }, [editItem]);
-
-  // const onSelect = (e) => {
-  //   setCat(e.target.value);
-  //   console.log(e.target.value);
-  // };
+  }, [editItems]);
 
   const handleAdd = (event) => {
     event.preventDefault();
-    onHandleAdd(title, iniCat, amount);
+    addValue(title, category, amount);
 
     setTitle("");
-    setCat("Select");
+    setCategory("Select");
     setAmount("");
   };
 
@@ -51,9 +49,9 @@ const Form = ({
             onChange={(e) => setTitle(e.target.value)}
           />
           <Select
-            value={iniCat}
-            onChange={onChangeSel}
-            arryCat={parentArray}
+            value={category}
+            onChange={onSelectChange}
+            arryCat={catArry}
             label={"Category"}
           />
           <Input
@@ -64,7 +62,7 @@ const Form = ({
           />
         </div>
 
-        <button className="add-btn">{editItem ? "Update" : "Add"}</button>
+        <button className="add-btn">{editItems ? "Update" : "Add"}</button>
       </form>
     </>
   );

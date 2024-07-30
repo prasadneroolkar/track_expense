@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react";
 import Select from "./Select";
-import ContextMenu from "./ContextMenu";
+import { useEffect, useState, useContext } from "react";
+import contextCreate from "../components/Context";
+import ContextMenu from "../components/ContextMenu";
 
-const Table = ({
-  itemsAdded,
-  onHandleDel,
-  onHandleEdit,
-  iniCat,
-  onChangeSel,
-  parentArray,
-}) => {
+const Table = () => {
+  const {
+    items,
+    delValue,
+    editValue,
+    catArry,
+    onTableSelectChange,
+    tableCategory,
+  } = useContext(contextCreate);
+
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [selectedItem, setSelectedItem] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
-  const [filteredItems, setFilteredItems] = useState(itemsAdded);
+  const [filteredItems, setFilteredItems] = useState(items);
   const [sortOrder, setSortOrder] = useState("asc");
 
   const sortItems = (items, order) => {
@@ -24,18 +27,18 @@ const Table = ({
 
   useEffect(() => {
     const filtered =
-      iniCat === "All"
-        ? itemsAdded
-        : itemsAdded.filter((item) => item.cat === iniCat);
+      tableCategory === "All"
+        ? items
+        : items.filter((item) => item.cat === tableCategory);
 
     setFilteredItems(sortItems(filtered, sortOrder)); // Default to ascending sort
-  }, [iniCat, itemsAdded, sortOrder]);
+  }, [tableCategory, items, sortOrder]);
 
   const onDelete = (index) => {
-    onHandleDel(index);
+    delValue(index);
   };
   const onEdit = (id, title, cat, amt) => {
-    onHandleEdit(id, title, cat, amt);
+    editValue(id, title, cat, amt);
   };
 
   const handleEdit = () => {
@@ -99,9 +102,9 @@ const Table = ({
             <th>Title</th>
             <th>
               <Select
-                value={iniCat}
-                onChange={onChangeSel}
-                arryCat={parentArray}
+                value={tableCategory}
+                onChange={onTableSelectChange}
+                arryCat={catArry}
               />
             </th>
             <th className="amount-column">
@@ -133,7 +136,7 @@ const Table = ({
         </thead>
         <tbody>
           {filteredItems.map((elem) => {
-            // console.log(itemsAdded);
+            // console.log(items);
             return (
               <>
                 <tr
